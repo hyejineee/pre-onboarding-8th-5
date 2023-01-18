@@ -9,6 +9,17 @@ export default class CommentRepository implements ICommentRepository {
     this.httpClient = httpClient;
   }
 
+  async fetchCommentsPage(page: number) {
+    try {
+      const { data } = (await this.httpClient.get(
+        `/comments?_${page}&_limit=5&_order=desc&_sort=id`,
+      )) as AxiosResponse<CommentType[]>;
+      return data;
+    } catch (e) {
+      throw new Error('댓글 목록 가져오기에 실패했습니다.');
+    }
+  }
+
   async fetchComments() {
     try {
       const { data } = (await this.httpClient.get(

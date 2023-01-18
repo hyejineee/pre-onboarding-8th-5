@@ -8,6 +8,7 @@ export interface IHttpClient {
 }
 
 export interface ICommentRepository {
+  fetchCommentsPage: (page: number) => Promise<CommentType[]>;
   fetchComments: () => Promise<CommentType[]>;
   fetchComment: (id: number) => Promise<CommentType>;
   createComment: (newComment: CommentType) => void;

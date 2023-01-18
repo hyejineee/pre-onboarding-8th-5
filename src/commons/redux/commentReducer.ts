@@ -10,11 +10,18 @@ const name = 'comment';
 type CommentStateType = {
   comments: CommentType[];
   isLoading: boolean;
+  page: number;
   error: { visible: boolean; message: string };
+};
+
+type ThunkPayloadType<T> = {
+  repository: ICommentRepository;
+  payload: T;
 };
 
 const initialState: CommentStateType = {
   comments: [],
+  page: 1,
   isLoading: false,
   error: {
     visible: false,
@@ -22,21 +29,23 @@ const initialState: CommentStateType = {
   },
 };
 
-const reducer = {
-  toggleIsLoading: (state: RootState) => ({
-    ...state,
-    isLoading: !state.isLoading,
-  }),
-};
-
-export type ThunkPayloadType<T> = {
-  repository: ICommentRepository;
-  payload: T;
-};
+export const fetchCommentsPageAction = createAsyncThunk(
+  `${name}/fetchCommentsPage`,
+  async ({ repository, payload }: ThunkPayloadType<number>, thunkAPI: any) => {
+    try {
+      return await repository.fetchCommentsPage(payload);
+    } catch (e) {
+      return thunkAPI.rejectWithValue((e as AxiosError).message);
+    }
+  },
+);
 
 export const fetchCommentsAction = createAsyncThunk(
   `${name}/fetchComments`,
-  async ({ repository }: ThunkPayloadType<undefined>, thunkAPI: any) => {
+  async (
+    { repository, payload }: ThunkPayloadType<undefined>,
+    thunkAPI: any,
+  ) => {
     try {
       return await repository.fetchComments();
     } catch (e) {
@@ -53,7 +62,37 @@ export const createCommentAction = createAsyncThunk(
   ) => {
     try {
       await repository.createComment(payload);
-      return await repository.fetchComments();
+      return await repository.fetchCommentsPage(1);
+    } catch (e) {
+      return thunkAPI.rejectWithValue((e as AxiosError).message);
+    }
+  },
+);
+
+export const updateCommentAction = createAsyncThunk(
+  `${name}/updateComment`,
+  async (
+    {
+      repository,
+      payload,
+    }: ThunkPayloadType<{ id: number; comment: CommentType; page: number }>,
+    thunkAPI: any,
+  ) => {
+    try {
+      await repository.updateComment(payload.id, payload.comment);
+      return await repository.fetchCommentsPage(payload.page);
+    } catch (e) {
+      return thunkAPI.rejectWithValue((e as AxiosError).message);
+    }
+  },
+);
+
+export const deleteCommentAction = createAsyncThunk(
+  `${name}/deleteComment`,
+  async ({ repository, payload }: ThunkPayloadType<number>, thunkAPI: any) => {
+    try {
+      await repository.deleteComment(payload);
+      return await repository.fetchCommentsPage(1);
     } catch (e) {
       return thunkAPI.rejectWithValue((e as AxiosError).message);
     }
@@ -80,14 +119,43 @@ const showError = (state: RootState, action: PayloadAction<string>) => ({
 });
 
 const fetchCommentsStatusReducer = {
-  [fetchCommentsAction.pending.type]: showLoading,
-  [fetchCommentsAction.fulfilled.type]: changeCommentState,
-  [fetchCommentsAction.rejected.type]: showError,
+  [fetchCommentsPageAction.pending.type]: showLoading,
+  [createCommentAction.pending.type]: showLoading,
+  [updateCommentAction.pending.type]: showLoading,
+  [deleteCommentAction.pending.type]: showLoading,
+
+  [fetchCommentsPageAction.fulfilled.type]: changeCommentState,
+  [createCommentAction.fulfilled.type]: changeCommentState,
+  [updateCommentAction.fulfilled.type]: changeCommentState,
+  [deleteCommentAction.fulfilled.type]: changeCommentState,
+
+  [fetchCommentsPageAction.rejected.type]: showError,
+  [createCommentAction.rejected.type]: showError,
+  [updateCommentAction.rejected.type]: showError,
+  [deleteCommentAction.rejected.type]: showError,
 };
 
-export const { reducer: commentReducer, actions } = createSlice({
+const reducers = {
+  toggleLoading: (state: RootState) => ({
+    ...state,
+    isLoading: !state.isLoading,
+  }),
+
+  hideError: (state: RootState) => ({
+    ...state,
+    error: {
+      visible: false,
+      message: '',
+    },
+  }),
+};
+
+const { reducer: commentReducer, actions } = createSlice({
   name,
   initialState,
-  reducers: { ...reducer },
+  reducers,
   extraReducers: { ...fetchCommentsStatusReducer },
 });
+
+export default commentReducer;
+export const { toggleLoading, hideError } = actions;
