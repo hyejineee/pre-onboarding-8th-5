@@ -1,12 +1,13 @@
 import { useEffect } from 'react';
-import { fetchComments } from 'redux/commentReducer';
-import { useAppThunkDispatch } from 'redux/hooks';
+import { useFetchComments } from 'commons/contexts/commentContext';
 
 function App() {
-  const dispatch = useAppThunkDispatch();
+  const fetchComments = useFetchComments();
+
   useEffect(() => {
-    dispatch(fetchComments({}));
-  }, [dispatch]);
+    fetchComments();
+  }, [fetchComments]);
+
   return <div>PROJECT INIT</div>;
 }
 
