@@ -29,7 +29,8 @@
     "react/react-in-jsx-scope": 0,
     "jsx-quotes": 0,
     "import/no-unresolved": 0,
-    "@typescript-eslint/indent": 0
+    "@typescript-eslint/indent": 0,
+    "import/no-cycle": 0
   },
   "settings": {
     "import/parsers": {

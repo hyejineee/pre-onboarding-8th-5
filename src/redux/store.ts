@@ -1,21 +1,14 @@
-import { Action, configureStore } from '@reduxjs/toolkit';
+import { configureStore } from '@reduxjs/toolkit';
+import { ToolkitStore } from '@reduxjs/toolkit/dist/configureStore';
 import logger from 'redux-logger';
-import thunk, { ThunkAction } from 'redux-thunk';
+import thunk from 'redux-thunk';
+import { commentReducer } from './commentReducer';
 
-const store = configureStore({
-  reducer: {},
+const store: ToolkitStore = configureStore({
+  reducer: { commentReducer },
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware().concat(thunk).concat(logger),
   devTools: process.env.NODE_ENV !== 'production',
 });
 
 export default store;
-
-export type RootState = ReturnType<typeof store.getState>;
-export type AppThunk<ReturnType = void> = ThunkAction<
-  ReturnType,
-  RootState,
-  unknown,
-  Action<string>
->;
-export type AppDispatch = typeof store.dispatch;
