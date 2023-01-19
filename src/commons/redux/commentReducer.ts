@@ -48,7 +48,10 @@ export const fetchCommentsAction = createAsyncThunk(
   `${name}/fetchComments`,
   async ({ repository }: ThunkPayloadType<undefined>, thunkAPI: any) => {
     try {
-      return await repository.fetchComments();
+      const comments = await repository.fetchComments();
+      // eslint-disable-next-line @typescript-eslint/no-use-before-define
+      thunkAPI.dispatch(updateTotalComment(comments.length));
+      return comments;
     } catch (e) {
       return thunkAPI.rejectWithValue((e as AxiosError).message);
     }
@@ -133,7 +136,6 @@ const fetchCommentsStatusReducer = {
   [deleteCommentAction.pending.type]: showLoading,
 
   [fetchCommentsPageAction.fulfilled.type]: changeCommentState,
-  [fetchCommentsAction.fulfilled.type]: changeCommentState,
   [createCommentAction.fulfilled.type]: changeCommentState,
   [updateCommentAction.fulfilled.type]: changeCommentState,
   [deleteCommentAction.fulfilled.type]: changeCommentState,

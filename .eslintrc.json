@@ -30,7 +30,8 @@
     "jsx-quotes": 0,
     "import/no-unresolved": 0,
     "@typescript-eslint/indent": 0,
-    "import/no-cycle": 0
+    "import/no-cycle": 0,
+    "react-hooks/exhaustive-deps": "warn"
   },
   "settings": {
     "import/parsers": {

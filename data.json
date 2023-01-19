@@ -8,13 +8,6 @@
       "createdAt": "2022-03-01"
     },
     {
-      "id": 2,
-      "profile_url": "https://picsum.photos/id/2/50/50",
-      "author": "abc_2",
-      "content": "막히면 대답은 빨리 해주나요",
-      "createdAt": "2022-03-02"
-    },
-    {
       "id": 3,
       "profile_url": "https://picsum.photos/id/3/50/50",
       "author": "abc_3",
@@ -153,6 +146,13 @@
       "author": "abc_22",
       "content": "주변에 React 개발자 있나요",
       "createdAt": "2022-03-22"
+    },
+    {
+      "author": "안녕하세요",
+      "content": "ㅇㅇㅇ",
+      "createdAt": "2023-01-18",
+      "profile_url": "https://picsum.photos/id/3/50/50",
+      "id": 23
     }
   ]
 }
