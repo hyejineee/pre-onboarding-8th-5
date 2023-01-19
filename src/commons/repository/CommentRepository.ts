@@ -1,4 +1,5 @@
 import { AxiosResponse } from 'axios';
+import { PAGE_LIMIT } from 'commons/constants/pagination';
 import CommentType from 'commons/types/comment.types';
 import { ICommentRepository, IHttpClient } from 'commons/types/module.types';
 
@@ -12,7 +13,7 @@ export default class CommentRepository implements ICommentRepository {
   async fetchCommentsPage(page: number) {
     try {
       const { data } = (await this.httpClient.get(
-        `/comments?_page=${page}&_limit=5&_order=desc&_sort=id`,
+        `/comments?_page=${page}&_limit=${PAGE_LIMIT}&_order=desc&_sort=id`,
       )) as AxiosResponse<CommentType[]>;
       return data;
     } catch (e) {

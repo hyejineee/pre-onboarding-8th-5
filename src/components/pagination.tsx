@@ -1,4 +1,5 @@
 import { Pagination as AntPagination } from 'antd';
+import styled from 'styled-components';
 
 type PaginationPropsType = {
   limit: number;
@@ -7,6 +8,12 @@ type PaginationPropsType = {
   onChangePage: (page: number) => void;
 };
 
+const Wrapper = styled.div`
+  text-align: center;
+  width: 100%;
+  margin: 12px 0;
+`;
+
 export default function Pagination({
   limit,
   totalItems,
@@ -14,11 +21,13 @@ export default function Pagination({
   onChangePage,
 }: PaginationPropsType) {
   return (
-    <AntPagination
-      current={currentPage}
-      onChange={onChangePage}
-      defaultPageSize={limit}
-      total={totalItems}
-    />
+    <Wrapper>
+      <AntPagination
+        current={currentPage}
+        onChange={onChangePage}
+        defaultPageSize={limit}
+        total={totalItems}
+      />
+    </Wrapper>
   );
 }
