@@ -102,6 +102,8 @@ const useCommentContext: (props: UseCommentContextProps) => ICommentService = ({
 export const [
   CommentProvider,
   useComments,
+  useTotalComment,
+  useCurrentPage,
   useFetchComments,
   useFetchCommentsPage,
   useCreateComment,
@@ -110,6 +112,8 @@ export const [
 ] = constate(
   useCommentContext,
   value => value.comments,
+  value => value.totalComment,
+  value => value.currentPage,
   value => value.fetchComments,
   value => value.fetchCommentsPage,
   value => value.createComment,
