@@ -29,7 +29,6 @@ function App() {
 
   const fetchComments = useFetchComments();
   const fetchCommentsPage = useFetchCommentsPage();
-  const createComment = useCreateComment();
 
   useEffect(() => {
     fetchComments();
@@ -43,18 +42,6 @@ function App() {
     [fetchCommentsPage],
   );
 
-  const handleClickRegister = useCallback(
-    (newComment: Omit<CommentType, 'id'>) => {
-      createComment(newComment);
-    },
-    [createComment],
-  );
-
-  const handleClickUpdate = useCallback(
-    (updated: Omit<CommentType, 'id' | 'createdAt'>) => {},
-    [],
-  );
-
   return (
     <Wrapper>
       <CommentList comments={comments} />
@@ -64,11 +51,7 @@ function App() {
         currentPage={currentPage}
         onChangePage={handleChangeCurrentPage}
       />
-      <CommentForm
-        isEdit={false}
-        onClickRegister={handleClickRegister}
-        onClickUpdate={handleClickUpdate}
-      />
+      <CommentForm />
     </Wrapper>
   );
 }

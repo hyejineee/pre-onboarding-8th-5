@@ -3,9 +3,14 @@ import {
   deleteCommentAction,
   fetchCommentsAction,
   fetchCommentsPageAction,
+  setUpdatedComment,
   updateCommentAction,
 } from 'commons/redux/commentReducer';
-import { useAppSelector, useAppThunkDispatch } from 'commons/redux/hooks';
+import {
+  useAppDispatch,
+  useAppSelector,
+  useAppThunkDispatch,
+} from 'commons/redux/hooks';
 import { RootState } from 'commons/redux/types';
 import CommentType from 'commons/types/comment.types';
 import {
@@ -13,6 +18,7 @@ import {
   ICommentService,
 } from 'commons/types/module.types';
 import constate from 'constate';
+import { stat } from 'fs';
 import { useCallback } from 'react';
 import { useSelector } from 'react-redux';
 
@@ -27,75 +33,90 @@ const useCommentContext: (props: UseCommentContextProps) => ICommentService = ({
   const totalComment = useAppSelector(
     (state: RootState) => state.comment.totalComment,
   );
+  const updatedComment = useAppSelector(
+    (state: RootState) => state.comment.updatedComment,
+  );
 
-  const dispatch = useAppThunkDispatch();
+  const asyncDispatch = useAppThunkDispatch();
+  const dispatch = useAppDispatch();
 
   const fetchComments = useCallback(async () => {
-    dispatch(
+    asyncDispatch(
       fetchCommentsAction({
         repository: commentRepository,
         payload: undefined,
       }),
     );
-  }, [commentRepository, dispatch]);
+  }, [commentRepository, asyncDispatch]);
 
   const fetchCommentsPage = useCallback(
     async (pageNumber: number) => {
-      dispatch(
+      asyncDispatch(
         fetchCommentsPageAction({
           repository: commentRepository,
           payload: pageNumber,
         }),
       );
     },
-    [commentRepository, dispatch],
+    [commentRepository, asyncDispatch],
   );
 
   const createComment = useCallback(
-    async (newComment: CommentType) => {
-      dispatch(
+    async (newComment: Omit<CommentType, 'id'>) => {
+      asyncDispatch(
         createCommentAction({
           repository: commentRepository,
           payload: newComment,
         }),
       );
     },
-    [commentRepository, dispatch],
+    [commentRepository, asyncDispatch],
   );
 
   const updateComment = useCallback(
     async (id: number, updated: CommentType) => {
-      dispatch(
+      asyncDispatch(
         updateCommentAction({
           repository: commentRepository,
           payload: { id, comment: updated, page: currentPage },
         }),
       );
+
+      dispatch(setUpdatedComment(undefined));
     },
-    [commentRepository, dispatch, currentPage],
+    [commentRepository, asyncDispatch, currentPage, dispatch],
   );
 
   const deleteComment = useCallback(
     async (id: number) => {
-      dispatch(
+      asyncDispatch(
         deleteCommentAction({
           repository: commentRepository,
           payload: id,
         }),
       );
     },
-    [commentRepository, dispatch],
+    [commentRepository, asyncDispatch],
+  );
+
+  const selectUpdatedComment = useCallback(
+    (edited: CommentType) => {
+      dispatch(setUpdatedComment(edited));
+    },
+    [dispatch],
   );
 
   return {
     comments,
     currentPage,
     totalComment,
+    updatedComment,
     fetchCommentsPage,
     fetchComments,
     createComment,
     updateComment,
     deleteComment,
+    selectUpdatedComment,
   };
 };
 
@@ -104,19 +125,24 @@ export const [
   useComments,
   useTotalComment,
   useCurrentPage,
+  useUpdatedComment,
   useFetchComments,
   useFetchCommentsPage,
   useCreateComment,
   useUpdateComment,
   useDeleteComment,
+  useSelectUpdatedComment,
 ] = constate(
   useCommentContext,
   value => value.comments,
   value => value.totalComment,
   value => value.currentPage,
+  value => value.updatedComment,
+
   value => value.fetchComments,
   value => value.fetchCommentsPage,
   value => value.createComment,
   value => value.updateComment,
   value => value.deleteComment,
+  value => value.selectUpdatedComment,
 );

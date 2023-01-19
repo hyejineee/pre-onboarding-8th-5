@@ -20,9 +20,11 @@ export interface ICommentService {
   comments: CommentType[];
   currentPage: number;
   totalComment: number;
+  updatedComment: CommentType;
   fetchCommentsPage: (page: number) => void;
   fetchComments: () => void;
   createComment: (newComment: CommentType) => void;
   updateComment: (id: number, updated: CommentType) => void;
   deleteComment: (id: number) => void;
+  selectUpdatedComment: (updated: CommentType) => void;
 }

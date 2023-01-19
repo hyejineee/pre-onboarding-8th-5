@@ -1,5 +1,7 @@
+/* eslint-disable @typescript-eslint/no-use-before-define */
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AxiosError } from 'axios';
+import { PAGE_LIMIT } from 'commons/constants/pagination';
 import CommentType from 'commons/types/comment.types';
 import { ICommentRepository } from 'commons/types/module.types';
 
@@ -10,6 +12,7 @@ const name = 'comment';
 type CommentStateType = {
   totalComment: number;
   comments: CommentType[];
+  updatedComment: CommentType | undefined;
   isLoading: boolean;
   page: number;
   error: { visible: boolean; message: string };
@@ -25,6 +28,7 @@ const initialState: CommentStateType = {
   page: 1,
   totalComment: 0,
   isLoading: false,
+  updatedComment: undefined,
   error: {
     visible: false,
     message: '',
@@ -35,7 +39,6 @@ export const fetchCommentsPageAction = createAsyncThunk(
   `${name}/fetchCommentsPage`,
   async ({ repository, payload }: ThunkPayloadType<number>, thunkAPI: any) => {
     try {
-      // eslint-disable-next-line @typescript-eslint/no-use-before-define
       thunkAPI.dispatch(updatePage(payload));
       return await repository.fetchCommentsPage(payload);
     } catch (e) {
@@ -49,7 +52,7 @@ export const fetchCommentsAction = createAsyncThunk(
   async ({ repository }: ThunkPayloadType<undefined>, thunkAPI: any) => {
     try {
       const comments = await repository.fetchComments();
-      // eslint-disable-next-line @typescript-eslint/no-use-before-define
+
       thunkAPI.dispatch(updateTotalComment(comments.length));
       return comments;
     } catch (e) {
@@ -67,9 +70,10 @@ export const createCommentAction = createAsyncThunk(
     try {
       await repository.createComment(payload);
       const comments = await repository.fetchComments();
-      // eslint-disable-next-line @typescript-eslint/no-use-before-define
+
       thunkAPI.dispatch(updateTotalComment(comments.length));
-      return comments;
+      thunkAPI.dispatch(updatePage(1));
+      return comments.reverse().slice(0, PAGE_LIMIT);
     } catch (e) {
       return thunkAPI.rejectWithValue((e as AxiosError).message);
     }
@@ -102,7 +106,7 @@ export const deleteCommentAction = createAsyncThunk(
       const comments = await repository.fetchComments();
       // eslint-disable-next-line @typescript-eslint/no-use-before-define
       thunkAPI.dispatch(updateTotalComment(comments.length));
-      return comments;
+      return comments.reverse().slice(0, PAGE_LIMIT);
     } catch (e) {
       return thunkAPI.rejectWithValue((e as AxiosError).message);
     }
@@ -170,6 +174,14 @@ const reducers = {
     ...state,
     page: action.payload,
   }),
+
+  setUpdatedComment: (
+    state: RootState,
+    action: PayloadAction<CommentType | undefined>,
+  ) => ({
+    ...state,
+    updatedComment: action.payload,
+  }),
 };
 
 const { reducer: commentReducer, actions } = createSlice({
@@ -180,5 +192,11 @@ const { reducer: commentReducer, actions } = createSlice({
 });
 
 export default commentReducer;
-export const { toggleLoading, hideError, updateTotalComment, updatePage } =
-  actions;
+
+export const {
+  toggleLoading,
+  hideError,
+  updateTotalComment,
+  updatePage,
+  setUpdatedComment,
+} = actions;
