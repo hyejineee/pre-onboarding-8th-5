@@ -15,3 +15,14 @@ export interface ICommentRepository {
   updateComment: (id: number, updated: CommentType) => void;
   deleteComment: (id: number) => void;
 }
+
+export interface ICommentService {
+  comments: CommentType[];
+  currentPage: number;
+  totalComment: number;
+  fetchCommentsPage: (page: number) => void;
+  fetchComments: () => void;
+  createComment: (newComment: CommentType) => void;
+  updateComment: (id: number, updated: CommentType) => void;
+  deleteComment: (id: number) => void;
+}

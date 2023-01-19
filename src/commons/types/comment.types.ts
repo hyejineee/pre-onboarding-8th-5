@@ -1,9 +1,9 @@
 type CommentType = {
-  id: number;
+  id?: number;
   profile_url: string;
   author: string;
   content: string;
-  createAt: string;
+  createdAt: string;
 };
 
 export default CommentType;
