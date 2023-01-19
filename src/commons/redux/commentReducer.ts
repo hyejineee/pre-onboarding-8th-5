@@ -8,6 +8,7 @@ import { RootState } from './types';
 const name = 'comment';
 
 type CommentStateType = {
+  totalComment: number;
   comments: CommentType[];
   isLoading: boolean;
   page: number;
@@ -22,6 +23,7 @@ type ThunkPayloadType<T> = {
 const initialState: CommentStateType = {
   comments: [],
   page: 1,
+  totalComment: 0,
   isLoading: false,
   error: {
     visible: false,
@@ -33,6 +35,8 @@ export const fetchCommentsPageAction = createAsyncThunk(
   `${name}/fetchCommentsPage`,
   async ({ repository, payload }: ThunkPayloadType<number>, thunkAPI: any) => {
     try {
+      // eslint-disable-next-line @typescript-eslint/no-use-before-define
+      thunkAPI.dispatch(updatePage(payload));
       return await repository.fetchCommentsPage(payload);
     } catch (e) {
       return thunkAPI.rejectWithValue((e as AxiosError).message);
@@ -42,10 +46,7 @@ export const fetchCommentsPageAction = createAsyncThunk(
 
 export const fetchCommentsAction = createAsyncThunk(
   `${name}/fetchComments`,
-  async (
-    { repository, payload }: ThunkPayloadType<undefined>,
-    thunkAPI: any,
-  ) => {
+  async ({ repository }: ThunkPayloadType<undefined>, thunkAPI: any) => {
     try {
       return await repository.fetchComments();
     } catch (e) {
@@ -62,7 +63,10 @@ export const createCommentAction = createAsyncThunk(
   ) => {
     try {
       await repository.createComment(payload);
-      return await repository.fetchCommentsPage(1);
+      const comments = await repository.fetchComments();
+      // eslint-disable-next-line @typescript-eslint/no-use-before-define
+      thunkAPI.dispatch(updateTotalComment(comments.length));
+      return comments;
     } catch (e) {
       return thunkAPI.rejectWithValue((e as AxiosError).message);
     }
@@ -92,7 +96,10 @@ export const deleteCommentAction = createAsyncThunk(
   async ({ repository, payload }: ThunkPayloadType<number>, thunkAPI: any) => {
     try {
       await repository.deleteComment(payload);
-      return await repository.fetchCommentsPage(1);
+      const comments = await repository.fetchComments();
+      // eslint-disable-next-line @typescript-eslint/no-use-before-define
+      thunkAPI.dispatch(updateTotalComment(comments.length));
+      return comments;
     } catch (e) {
       return thunkAPI.rejectWithValue((e as AxiosError).message);
     }
@@ -120,16 +127,19 @@ const showError = (state: RootState, action: PayloadAction<string>) => ({
 
 const fetchCommentsStatusReducer = {
   [fetchCommentsPageAction.pending.type]: showLoading,
+  [fetchCommentsAction.pending.type]: showLoading,
   [createCommentAction.pending.type]: showLoading,
   [updateCommentAction.pending.type]: showLoading,
   [deleteCommentAction.pending.type]: showLoading,
 
   [fetchCommentsPageAction.fulfilled.type]: changeCommentState,
+  [fetchCommentsAction.fulfilled.type]: changeCommentState,
   [createCommentAction.fulfilled.type]: changeCommentState,
   [updateCommentAction.fulfilled.type]: changeCommentState,
   [deleteCommentAction.fulfilled.type]: changeCommentState,
 
   [fetchCommentsPageAction.rejected.type]: showError,
+  [fetchCommentsAction.rejected.type]: showError,
   [createCommentAction.rejected.type]: showError,
   [updateCommentAction.rejected.type]: showError,
   [deleteCommentAction.rejected.type]: showError,
@@ -148,6 +158,16 @@ const reducers = {
       message: '',
     },
   }),
+
+  updateTotalComment: (state: RootState, action: PayloadAction<number>) => ({
+    ...state,
+    totalComment: action.payload,
+  }),
+
+  updatePage: (state: RootState, action: PayloadAction<number>) => ({
+    ...state,
+    page: action.payload,
+  }),
 };
 
 const { reducer: commentReducer, actions } = createSlice({
@@ -158,4 +178,5 @@ const { reducer: commentReducer, actions } = createSlice({
 });
 
 export default commentReducer;
-export const { toggleLoading, hideError } = actions;
+export const { toggleLoading, hideError, updateTotalComment, updatePage } =
+  actions;
