@@ -22,7 +22,7 @@ export default function Comment({
 }: CommentPropsType) {
   return (
     <Card
-      style={{ width: 400, margin: '16px' }}
+      style={{ width: 400, margin: '8px' }}
       actions={[
         <EditOutlined key='edit' onClick={onClickUpdate} />,
         <DeleteOutlined key='ellipsis' onClick={onClickDelete} />,
