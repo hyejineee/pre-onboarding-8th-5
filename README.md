@@ -48,6 +48,37 @@ https://github.com/hyejineee/redux-comment/blob/22b7b472ef6c93c1487cbfeb4582d826
 https://github.com/hyejineee/redux-comment/blob/22b7b472ef6c93c1487cbfeb4582d826f0e9a340/src/commons/types/module.types.ts#L10-L17
 
 
+<details>
+  <summary>댓글 페이지네이션</summary>
+    <div markdown="1">
+       <img src= "https://github.com/hyejineee/redux-comment/blob/master/gif/%EB%8C%93%EA%B8%80%20-%20%ED%8E%98%EC%9D%B4%EC%A7%80%EB%84%A4%EC%9D%B4%EC%85%98.gif?raw=true"/>
+    </div>
+</details>
+
+<details>
+  <summary>댓글 등록</summary>
+    <div markdown="1">
+       <img src= "https://github.com/hyejineee/redux-comment/blob/master/gif/%EB%8C%93%EA%B8%80%20-%20%EB%93%B1%EB%A1%9D.gif?raw=true"/>
+    </div>
+</details>
+
+<details>
+  <summary>댓글 수정</summary>
+    <div markdown="1">
+      <img src= "https://github.com/hyejineee/redux-comment/blob/master/gif/%EB%8C%93%EA%B8%80%20-%20%EC%88%98%EC%A0%95.gif?raw=true"/>
+    </div>
+</details>
+
+
+<details>
+  <summary>댓글 삭제</summary>
+    <div markdown="1">
+       <img src= "https://github.com/hyejineee/redux-comment/blob/master/gif/%EB%8C%93%EA%B8%80%20-%20%EC%82%AD%EC%A0%9C.gif?raw=true"/>
+    </div>
+</details>
+
+
+
 <br/>
 
 ## 회고 <a id="3"></a>
