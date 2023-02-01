@@ -1,6 +1,9 @@
 # Redux 댓글 CRUD
 원티드 프리온보딩 인턴십에서 4주차 과제로 API 서버와 통신해서 작동하는 댓글 프로젝트를 Redux를 통해 구현했습니다.
 
+**배포 사이트에 접속하기 전에 반드시 [API 서버](#5)를 실행해 주세요**  
+[🔗 배포 링크](https://redux-comment.vercel.app/)
+
 ## 목차
 - [요구 사항](#1)
 - [구현 내용](#2)
@@ -44,7 +47,7 @@ https://github.com/hyejineee/redux-comment/blob/22b7b472ef6c93c1487cbfeb4582d826
 
 https://github.com/hyejineee/redux-comment/blob/22b7b472ef6c93c1487cbfeb4582d826f0e9a340/src/commons/types/module.types.ts#L10-L17
 
-![](./gif/search.gif)
+
 <br/>
 
 ## 회고 <a id="3"></a>

@@ -120,13 +120,6 @@
       "createdAt": "2022-03-18"
     },
     {
-      "id": 19,
-      "profile_url": "https://picsum.photos/id/19/50/50",
-      "author": "abc_19",
-      "content": "막히면 대답은 빨리 해주나요",
-      "createdAt": "2022-03-19"
-    },
-    {
       "id": 20,
       "profile_url": "https://picsum.photos/id/20/50/50",
       "author": "abc_20",
@@ -146,48 +139,6 @@
       "author": "abc_22",
       "content": "주변에 React 개발자 있나요",
       "createdAt": "2022-03-22"
-    },
-    {
-      "author": "ssss",
-      "content": "ㅇㅇㅇ 수정 tnwjdsssssssddddsssertwertwertwertmdhosss",
-      "createdAt": "2023-01-18",
-      "profile_url": "https://picsum.photos/id/3/50/50",
-      "id": 23
-    },
-    {
-      "profile_url": "https://picsum.photos/id/53/50/50",
-      "author": "123",
-      "content": "123",
-      "createdAt": "2023-01-19",
-      "id": 24
-    },
-    {
-      "profile_url": "https://picsum.photos/id/25/50/50",
-      "author": "12",
-      "content": "12",
-      "createdAt": "2023-01-19",
-      "id": 25
-    },
-    {
-      "profile_url": "https://picsum.photos/id/55/50/50",
-      "author": "123",
-      "content": "123",
-      "createdAt": "2023-01-19",
-      "id": 26
-    },
-    {
-      "profile_url": "https://picsum.photos/id/65/50/50",
-      "author": "111",
-      "content": "111",
-      "createdAt": "2023-01-19",
-      "id": 27
-    },
-    {
-      "profile_url": "https://picsum.photos/id/9/50/50",
-      "author": "66tnwjd",
-      "content": "66tnwjd",
-      "createdAt": "2023-01-19",
-      "id": 30
     }
   ]
 }
